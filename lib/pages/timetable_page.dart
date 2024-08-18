@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:kiittime/components/constants.dart';
 import 'package:kiittime/components/tt_builder.dart';
 
 class TimeTablePage extends StatefulWidget {
   const TimeTablePage({super.key});
-  
+
   @override
   State<TimeTablePage> createState() => _TimeTableState();
 }
@@ -20,6 +21,16 @@ class _TimeTableState extends State<TimeTablePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('KIITIME'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                final ttBox = Hive.box(name: 'timetable');
+                ttBox.clear();
+                Navigator.pushReplacementNamed(context, '/homepage');
+              },
+              icon: const Icon(Icons.refresh),
+            )
+          ],
           bottom: TabBar(
             // isScrollable: true,
             tabs: [
@@ -34,7 +45,7 @@ class _TimeTableState extends State<TimeTablePage> {
         body: TabBarView(
           children: [
             for (var day in tabs)
-              TtBuilder(
+              TTBuilder(
                 day: day.toUpperCase(),
               ),
           ],

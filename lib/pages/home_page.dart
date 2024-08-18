@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kiittime/models/timetable_model.dart';
 import 'package:provider/provider.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -13,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final rollController = TextEditingController();
-
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,31 +47,42 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: FilledButton(
-                style: ButtonStyle(
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  minimumSize:
-                      const WidgetStatePropertyAll(Size.fromHeight(60)),
-                ),
-                onPressed: () {
-                  Provider.of<TimeTableModel>(context,listen: false).getSection(rollController.text);
-                  Navigator.pushNamed(context, '/timetable');
-                },
-                child: Container(
-                  width: 180,
-                  padding: const EdgeInsets.all(12),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Submit"),
-                      Icon(Icons.navigate_next_rounded)
-                    ],
-                  ),
-                ),
-              ),
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : FilledButton(
+                      style: ButtonStyle(
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        minimumSize:
+                            const WidgetStatePropertyAll(Size.fromHeight(60)),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await Provider.of<TimeTableModel>(context,
+                                listen: false)
+                            .getSection(rollController.text);
+                        await Provider.of<TimeTableModel>(context,
+                                listen: false)
+                            .getData();
+                        
+                        Navigator.pushReplacementNamed(context, '/timetable');
+                      },
+                      child: Container(
+                        width: 180,
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Submit"),
+                            Icon(Icons.navigate_next_rounded)
+                          ],
+                        ),
+                      ),
+                    ),
             ),
           ],
         ),
