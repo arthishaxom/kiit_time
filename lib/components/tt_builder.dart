@@ -17,7 +17,7 @@ class TTBuilder extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16.0),
       child: Center(
         child: ListView.separated(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 80),
           itemCount: section.length,
           separatorBuilder: (context, index) => const SizedBox(
             height: 12,

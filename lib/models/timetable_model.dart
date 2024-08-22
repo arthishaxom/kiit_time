@@ -7,8 +7,18 @@ class TimeTableModel with ChangeNotifier {
   final supabase = Supabase.instance.client;
   final ttBox = Hive.box(name: 'timetable');
 
-  Future<void> getData() async {
+  Future<void> getData(String roll) async {
     List<String> tabs = Constants().daysIndex.keys.toList();
+    
+    final sectionData =
+        await supabase.from('year3_sections').select().eq('Roll', roll);
+    ttBox.putAll({
+      'section': sectionData[0]['Section'],
+      'elective1': sectionData[1]['Section'],
+      'elective2': sectionData[2]['Section'],
+      'roll': roll
+    });
+
     for (var day in tabs) {
       final data = await supabase
           .from('year3_tt')
@@ -24,17 +34,5 @@ class TimeTableModel with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  Future<void> getSection(String roll) async {
-    final data =
-        await supabase.from('year3_sections').select().eq('Roll', roll);
-    ttBox.putAll({
-      'section': data[0]['Section'],
-      'elective1': data[1]['Section'],
-      'elective2': data[2]['Section']
-    });
-    notifyListeners();
-  }
 }
-
                   

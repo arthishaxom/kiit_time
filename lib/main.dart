@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:kiittime/models/theme_provider.dart';
 import 'package:kiittime/models/timetable_model.dart';
-import 'package:kiittime/pages/home_page.dart';
 import 'package:kiittime/pages/intro_page.dart';
+import 'package:kiittime/pages/roll_page.dart';
 import 'package:kiittime/pages/timetable_page.dart';
+import 'package:kiittime/theme/dark_theme.dart';
+import 'package:kiittime/theme/light_theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +27,11 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => TimeTableModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => TimeTableModel()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -36,18 +42,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: IntroPage(),
-      theme: ThemeData(
-        colorScheme: const ColorScheme.light(
-            primary: Color.fromARGB(255, 255, 134, 35),
-            secondary: Color.fromARGB(255, 255, 228, 188)),
-        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-      ),
-      routes: {
-        '/timetable': (context) => const TimeTablePage(),
-        '/homepage':(context) => const HomePage(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: const IntroPage(),
+          theme: lightTheme.copyWith(
+              textTheme: GoogleFonts.latoTextTheme(lightTheme.textTheme)),
+          darkTheme: darkTheme.copyWith(
+              textTheme: GoogleFonts.latoTextTheme(lightTheme.textTheme)),
+          themeMode:
+              themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          onGenerateRoute: (settings) {
+            if (settings.name == '/timetable') {
+              final args = settings.arguments as Map<String, String>;
+              final rollNumber = args['rollNumber'] ?? '22053062';
+              return MaterialPageRoute(
+                builder: (context) => TimeTablePage(rollNumber: rollNumber),
+              );
+            } else if (settings.name == '/roll') {
+              return MaterialPageRoute(
+                builder: (context) => const RollPage(),
+              );
+            }
+            // Default route (you might want to adjust this based on your app's structure)
+            return MaterialPageRoute(
+              builder: (context) => const IntroPage(),
+            );
+          },
+        );
       },
     );
   }
