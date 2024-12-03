@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:kiittime/components/class_tile.dart';
 
 class TTBuilder extends StatelessWidget {
@@ -8,7 +8,7 @@ class TTBuilder extends StatelessWidget {
     this.day,
     super.key,
   });
-  final ttBox = Hive.box(name: 'timetable');
+  final ttBox = Hive.box('timetable');
 
   @override
   Widget build(BuildContext context) {

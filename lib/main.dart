@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:kiittime/models/theme_provider.dart';
 import 'package:kiittime/models/timetable_model.dart';
 import 'package:kiittime/pages/intro_page.dart';
@@ -9,15 +9,17 @@ import 'package:kiittime/pages/roll_page.dart';
 import 'package:kiittime/pages/timetable_page.dart';
 import 'package:kiittime/theme/dark_theme.dart';
 import 'package:kiittime/theme/light_theme.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final dir = await getApplicationDocumentsDirectory();
-  Hive.defaultDirectory = dir.path;
+  // final dir = await getApplicationDocumentsDirectory();
+  // Hive.defaultDirectory = dir.path;
+
+  await Hive.initFlutter();
+  await Hive.openBox('timetable');
 
   await dotenv.load(fileName: ".env");
 

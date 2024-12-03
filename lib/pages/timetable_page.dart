@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:kiittime/components/constants.dart';
 import 'package:kiittime/components/skeleton_table.dart';
 import 'package:kiittime/components/tt_builder.dart';
@@ -25,7 +25,7 @@ class _TimeTableState extends State<TimeTablePage> {
   int dayIndex = Constants().getDayIndex();
 
   Future<void> _fetchTimeTableData(BuildContext context) async {
-    Box ttBox = Hive.box(name: 'timetable');
+    Box ttBox = Hive.box('timetable');
     if (ttBox.isEmpty) {
       await context
           .read<TimeTableModel>()
@@ -34,7 +34,7 @@ class _TimeTableState extends State<TimeTablePage> {
   }
 
   void reset() {
-    final ttBox = Hive.box(name: 'timetable');
+    final ttBox = Hive.box('timetable');
     ttBox.clear();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
@@ -77,6 +77,9 @@ class _TimeTableState extends State<TimeTablePage> {
             body: const TimeTableSkeleton(), // Show skeleton while loading
           );
         } else if (snapshot.hasError) {
+          debugPrintStack(
+              label: snapshot.error.toString(),
+              stackTrace: snapshot.stackTrace);
           return const RollNotfound();
         } else {
           return DefaultTabController(
