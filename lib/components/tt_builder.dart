@@ -23,7 +23,7 @@ class TTBuilder extends StatelessWidget {
             height: 12,
           ),
           itemBuilder: ((context, index) {
-            final classroom = section[index];
+            final classroom = Map<String, dynamic>.from(section[index]);
             return ClassTile(classroom: classroom);
           }),
         ),
