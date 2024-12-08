@@ -12,7 +12,7 @@ class TTBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final section = ttBox.get(day);
+    final section = ttBox.get(day!);
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Center(
