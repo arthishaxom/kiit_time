@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/release
 .env
 .vscode/settings.json
+env
+/.well-known
+firebase.json
+.firebaserc
+.firebase/hosting.YnVpbGRcd2Vi.cache
+web/index.html
+Y/index.html
+web/index.html

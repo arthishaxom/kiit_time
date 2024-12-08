@@ -21,7 +21,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('timetable');
 
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
 
   await Supabase.initialize(
     url: dotenv.env['URL']!,
