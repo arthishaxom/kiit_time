@@ -13,7 +13,7 @@ class RollPage extends StatefulWidget {
 class _RollPageState extends State<RollPage> {
   TextEditingController rollController = TextEditingController();
 
-  String? _errorText;
+  String _errorText = "Default";
 
   void _validateInput(String value) {
     setState(() {
@@ -22,7 +22,7 @@ class _RollPageState extends State<RollPage> {
       } else if (value.length < 7) {
         _errorText = 'Roll Number must be atleast 7 digits long';
       } else {
-        _errorText = null; // Input is valid
+        _errorText = "Default"; // Input is valid
       }
     });
   }
@@ -97,7 +97,7 @@ class _RollPageState extends State<RollPage> {
                         counterText: '',
                         errorStyle: TextStyle(
                             color: context.colorScheme.errorContainer),
-                        errorText: _errorText,
+                        errorText: _errorText == "Default" ? null : _errorText,
                         helper: Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -127,7 +127,7 @@ class _RollPageState extends State<RollPage> {
                   child: GestureDetector(
                     onTap: () {
                       _validateInput(rollController.text);
-                      if (_errorText == null) {
+                      if (_errorText == "Default") {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                             builder: (context) =>
@@ -151,7 +151,7 @@ class _RollPageState extends State<RollPage> {
                                   width: 8,
                                 ),
                                 Text(
-                                  _errorText!,
+                                  _errorText,
                                   style: TextStyle(
                                       color: context.colorScheme.onSurface),
                                 ),
@@ -177,7 +177,9 @@ class _RollPageState extends State<RollPage> {
                           child: Text(
                             "Submit",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
