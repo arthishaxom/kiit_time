@@ -10,6 +10,7 @@ import 'package:kiittime/pages/roll_page.dart';
 import 'package:kiittime/theme/extensions.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TimeTablePage extends StatefulWidget {
   final String rollNumber;
@@ -55,9 +56,9 @@ class _TimeTableState extends State<TimeTablePage> {
   );
 
   void shareapp() async {
-    const url = 'https://github.com/arthishaxom/kiit_time/releases';
+    const url = 'https://kiit-time-web.web.app/';
     await Share.share(
-        'Check Out This Timetable App : $url. You can download it from github, just download the apk file and install.');
+        'Check Out KIITTIME, A Clean TimeTable WebApp, No-Fuzz : $url');
   }
 
   @override
@@ -205,6 +206,36 @@ class _TimeTableState extends State<TimeTablePage> {
                                             ),
                                           ),
                                         ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Made with ❤️ by - ",
+                                      style: TextStyle(
+                                          color: context.colorScheme.onSurface),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final Uri url = Uri.parse(
+                                            'https://www.linkedin.com/in/ashish-pothal/');
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      },
+                                      child: const Text(
+                                        "Ashish Pothal",
+                                        style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            decoration:
+                                                TextDecoration.underline),
                                       ),
                                     ),
                                   ],
