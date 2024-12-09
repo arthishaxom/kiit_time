@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:kiittime/models/theme_provider.dart';
@@ -20,8 +19,6 @@ void main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('timetable');
-
-  await dotenv.load(fileName: "env");
 
   await Supabase.initialize(
     url: const String.fromEnvironment('SUPABASE_URL'),
