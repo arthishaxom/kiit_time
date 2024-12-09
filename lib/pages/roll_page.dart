@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kiittime/components/logo_text.dart';
 import 'package:kiittime/pages/timetable_page.dart';
 import 'package:kiittime/theme/extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RollPage extends StatefulWidget {
   const RollPage({super.key});
@@ -121,8 +122,32 @@ class _RollPageState extends State<RollPage> {
                 ],
               ),
             ),
-            Row(
+            Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Made with ❤️ by - ",
+                      style: TextStyle(color: context.colorScheme.onSurface),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        final Uri url = Uri.parse(
+                            'https://www.linkedin.com/in/ashish-pothal/');
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                      child: Text(
+                        "Ashish Pothal",
+                        style: TextStyle(
+                            color: context.colorScheme.primary,
+                            decoration: TextDecoration.underline),
+                      ),
+                    ),
+                  ],
+                ),
                 Expanded(
                   child: GestureDetector(
                     onTap: () {

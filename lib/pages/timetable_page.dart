@@ -56,7 +56,7 @@ class _TimeTableState extends State<TimeTablePage> {
   );
 
   void shareapp() async {
-    const url = 'https://kiit-time-web.web.app/';
+    const url = 'https://kiittime.ashishpothal.tech/';
     await Share.share(
         'Check Out KIITTIME, A Clean TimeTable WebApp, No-Fuzz : $url');
   }
@@ -230,12 +230,13 @@ class _TimeTableState extends State<TimeTablePage> {
                                               'Could not launch $url');
                                         }
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         "Ashish Pothal",
                                         style: TextStyle(
-                                            color: Colors.blueAccent,
-                                            decoration:
-                                                TextDecoration.underline),
+                                          color: context.colorScheme.primary,
+                                          decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ],
