@@ -142,8 +142,10 @@ class _RollPageState extends State<RollPage> {
                       child: Text(
                         "Ashish Pothal",
                         style: TextStyle(
-                            color: context.colorScheme.primary,
-                            decoration: TextDecoration.underline),
+                          color: context.colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
