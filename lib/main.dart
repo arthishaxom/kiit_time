@@ -21,8 +21,8 @@ void main() async {
   await Hive.openBox('timetable');
 
   await Supabase.initialize(
-    url: const String.fromEnvironment('SUPABASE_URL'),
-    anonKey: const String.fromEnvironment('SUPABASE_ANON_KEY'),
+    url: const String.fromEnvironment('URL'),
+    anonKey: const String.fromEnvironment('ANON'),
   );
 
   runApp(
