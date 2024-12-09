@@ -24,8 +24,8 @@ void main() async {
   await dotenv.load(fileName: "env");
 
   await Supabase.initialize(
-    url: dotenv.env['URL']!,
-    anonKey: dotenv.env['ANON']!,
+    url: const String.fromEnvironment('SUPABASE_URL'),
+    anonKey: const String.fromEnvironment('SUPABASE_ANON_KEY'),
   );
 
   runApp(

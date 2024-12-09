@@ -1,11 +1,11 @@
 {
-    "name": "kiit_time",
-    "short_name": "kiit_time",
+    "name": "KIIT Time",
+    "short_name": "KIIT Time",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A No-Fuzz Minimal Timetable App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
