@@ -15,6 +15,11 @@ class TimeTableModel with ChangeNotifier {
     int currentYear = DateTime.now().year % 100;
     int collegeYear = currentYear - admissionYear + 1;
 
+    // Check if the 5th digit is 7 (lateral entry student)
+    if (roll.length > 4 && roll[4] == '7') {
+      collegeYear += 1;
+    }
+
     // Determine the table name based on the college year
     String tableName = 'year${collegeYear}_tt';
 
