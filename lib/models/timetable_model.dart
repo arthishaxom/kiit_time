@@ -13,7 +13,7 @@ class TimeTableModel with ChangeNotifier {
     // Calculate the year of admission and current year
     int admissionYear = int.parse(roll.substring(0, 2));
     int currentYear = DateTime.now().year % 100;
-    int collegeYear = currentYear - admissionYear + 1;
+    int collegeYear = currentYear - admissionYear;
 
     // Check if the 5th digit is 7 (lateral entry student)
     if (roll.length > 4 && roll[4] == '7') {
