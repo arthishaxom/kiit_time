@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:kiittime/components/constants.dart';
+import 'package:kiittime/core/utils/days.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TimeTableModel with ChangeNotifier {
-  final supabase = Supabase.instance.client;
-  final ttBox = Hive.box('timetable');
+class TimetableRepository {
+  final SupabaseClient supabase;
+  final Box timetableBox;
 
-  Future<void> getData(String roll) async {
-    List<String> tabs = Constants().daysIndex.keys.toList();
+  TimetableRepository({required this.supabase, required this.timetableBox});
+
+  Future<void> fetchAndStoreTimetable(String roll) async {
+    List<String> days = Constants().daysIndex.keys.toList();
 
     // Calculate the year of admission and current year
     int admissionYear = int.parse(roll.substring(0, 2));
@@ -26,27 +27,29 @@ class TimeTableModel with ChangeNotifier {
     // Determine the table name based on the college year
     String tableName = 'year${collegeYear}_tt';
 
+    // Fetch section data from Supabase
     final sectionData = await supabase
         .from('year${collegeYear}_sections')
         .select()
         .eq('Roll', roll);
-    Map<String, dynamic> sectionMap = {'roll': roll};
 
+    // Prepare a map to store section information
+    Map<String, dynamic> sectionMap = {'roll': roll};
     for (var i = 0; i < sectionData.length; i++) {
       sectionMap['section${i + 1}'] = sectionData[i]['Section'];
     }
+    // Store section information in Hive
+    await timetableBox.putAll(sectionMap);
 
-    ttBox.putAll(sectionMap);
-
-    for (var day in tabs) {
+    // Fetch and store timetable data for each day
+    for (var day in days) {
       final data = await supabase
           .from(tableName)
           .select()
           .inFilter('Section', sectionMap.values.toList())
           .eq('Day', day.toUpperCase())
           .order('Time_Sort', ascending: true);
-      ttBox.put(day.toUpperCase(), data);
+      await timetableBox.put(day.toUpperCase(), data);
     }
-    notifyListeners();
   }
 }

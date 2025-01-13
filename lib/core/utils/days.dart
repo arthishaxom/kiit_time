@@ -10,12 +10,12 @@ class Constants {
     'Sat': 5
   };
 
-  int getDayIndex() {
+  String getDayIndex() {
     String day = DateFormat('E').format(DateTime.now());
     if (day == 'Sun') {
-      return 0;
+      return 'Mon';
     } else {
-      return daysIndex[day]!;
+      return day;
     }
   }
 }

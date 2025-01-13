@@ -1,76 +1,66 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:kiittime/models/theme_provider.dart';
-import 'package:kiittime/models/timetable_model.dart';
-import 'package:kiittime/pages/intro_page.dart';
-import 'package:kiittime/pages/roll_page.dart';
-import 'package:kiittime/pages/timetable_page.dart';
-import 'package:kiittime/theme/dark_theme.dart';
-import 'package:kiittime/theme/light_theme.dart';
+import 'package:hive_ce_flutter/adapters.dart';
+import 'package:kiittime/presentation/bloc/timetable/timetable_cubit.dart';
+import 'package:kiittime/presentation/pages/home_page.dart';
+import 'package:kiittime/repo/class_repo.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // final dir = await getApplicationDocumentsDirectory();
-  // Hive.defaultDirectory = dir.path;
-
+  // Initialize Hive
   await Hive.initFlutter();
-  await Hive.openBox('timetable');
+  var timetableBox = await Hive.openBox('timetable');
 
+  // Initialize Supabase
   await Supabase.initialize(
     url: const String.fromEnvironment('URL'),
     anonKey: const String.fromEnvironment('ANON'),
   );
 
+  // Create an instance of the repository
+  var timetableRepository = TimetableRepository(
+    supabase: Supabase.instance.client,
+    timetableBox: timetableBox,
+  );
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => TimeTableModel()),
-      ],
-      child: const MyApp(),
+    MyApp(
+      timetableRepository: timetableRepository,
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final TimetableRepository timetableRepository;
 
+  const MyApp({
+    super.key,
+    required this.timetableRepository,
+  });
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: const IntroPage(),
-          theme: lightTheme.copyWith(
-              textTheme: GoogleFonts.latoTextTheme(lightTheme.textTheme)),
-          darkTheme: darkTheme.copyWith(
-              textTheme: GoogleFonts.latoTextTheme(lightTheme.textTheme)),
-          themeMode:
-              themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          onGenerateRoute: (settings) {
-            if (settings.name == '/timetable') {
-              final args = settings.arguments as Map<String, String>;
-              final rollNumber = args['rollNumber'] ?? '22053062';
-              return MaterialPageRoute(
-                builder: (context) => TimeTablePage(rollNumber: rollNumber),
-              );
-            } else if (settings.name == '/roll') {
-              return MaterialPageRoute(
-                builder: (context) => const RollPage(),
-              );
-            }
-            // Default route (you might want to adjust this based on your app's structure)
-            return MaterialPageRoute(
-              builder: (context) => const IntroPage(),
-            );
-          },
-        );
-      },
+    return BlocProvider(
+      create: (context) => TimetableCubit(timetableRepository),
+      child: ShadApp(
+        debugShowCheckedModeBanner: false,
+        title: 'KIIT TIME',
+        themeMode: ThemeMode.dark,
+        darkTheme: ShadThemeData(
+          colorScheme: const ShadOrangeColorScheme.dark(),
+          brightness: Brightness.dark,
+          textTheme: ShadTextTheme.fromGoogleFont(
+            GoogleFonts.poppins,
+            // colorScheme: const ShadZincColorScheme.dark(),
+          ),
+        ),
+        home: const HomePage(),
+      ),
     );
   }
 }
