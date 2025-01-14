@@ -17,20 +17,17 @@ class TimeTableSkeleton extends StatelessWidget {
     return Skeletonizer(
       containersColor: ShadTheme.of(context).colorScheme.muted,
       enabled: true, // Always enabled for the skeleton screen
-      child: Container(
-        padding: const EdgeInsets.only(top: 16),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ClassTile(classroom: dummy);
-          },
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 20,
-            );
-          },
-          itemCount: 5,
-        ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return ClassTile(classroom: dummy);
+        },
+        separatorBuilder: (context, index) {
+          return const SizedBox(
+            height: 20,
+          );
+        },
+        itemCount: 5,
       ),
     );
   }

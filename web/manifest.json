@@ -3,7 +3,7 @@
     "short_name": "KIIT Time",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
+    "background_color": "#141414",
     "theme_color": "#0175C2",
     "description": "A No-Fuzz Minimal Timetable App",
     "orientation": "portrait-primary",
