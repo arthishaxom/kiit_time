@@ -20,21 +20,19 @@ class TTBuilder extends StatelessWidget {
         if (state is TimetableLoaded) {
           final ttBox = Hive.box('timetable');
           final section = ttBox.get(day);
-          return Center(
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: section.length,
-              separatorBuilder: (context, index) => const SizedBox(
-                height: 12,
-              ),
-              itemBuilder: (context, index) {
-                final classroom = Map<String, dynamic>.from(section[index]);
-                return ClassTile(classroom: classroom);
-              },
+          return ListView.separated(
+            shrinkWrap: true,
+            itemCount: section.length,
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 12,
             ),
+            itemBuilder: (context, index) {
+              final classroom = Map<String, dynamic>.from(section[index]);
+              return ClassTile(classroom: classroom);
+            },
           );
         } else if (state is TimetableLoading) {
-          return const Center(child: TimeTableSkeleton());
+          return const TimeTableSkeleton();
         } else {
           return const Center(child: Text('No timetable available.'));
         }
