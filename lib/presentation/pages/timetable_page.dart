@@ -42,7 +42,7 @@ class _TimetablePageState extends State<TimetablePage> {
   void shareapp() async {
     const url = 'https://kiittime.ashishpothal.tech/';
     await Share.share(
-        'Check Out KIITTIME, A Clean TimeTable WebApp, No-Fuzz : $url');
+        '''Check Out KIIT TIME, A Clean TimeTable App, No-Fuzz : $url\n\nFor IOS users : https://kiittime.ashishpothal.tech''');
   }
 
   @override
@@ -69,6 +69,7 @@ class _TimetablePageState extends State<TimetablePage> {
                   color: shadcon.colorScheme.muted,
                 ),
                 child: TabBar(
+                  textScaler: TextScaler.noScaling,
                   unselectedLabelColor: shadcon.colorScheme.foreground,
                   dividerColor: Colors.transparent,
                   labelColor: shadcon.colorScheme.foreground,
