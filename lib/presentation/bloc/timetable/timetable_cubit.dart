@@ -27,4 +27,12 @@ class TimetableCubit extends Cubit<TimetableState> {
       emit(TimetableError(e.toString()));
     }
   }
+
+  void scheduleClasses() async {
+    try {
+      await repository.scheduleAllClassNotifications();
+    } catch (e) {
+      emit(TimetableError(e.toString()));
+    }
+  }
 }

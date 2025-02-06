@@ -34,6 +34,9 @@ class TTBuilder extends StatelessWidget {
         } else if (state is TimetableLoading) {
           return const TimeTableSkeleton();
         } else {
+          // if (state is TimetableError) {
+          //   print(state.message);
+          // }
           return const Center(child: Text('No timetable available.'));
         }
       },
