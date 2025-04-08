@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "flutter",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--dart-define=URL=https://inxpyrnvledmkyupocmx.supabase.co",
+        "--dart-define=ANON=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlueHB5cm52bGVkbWt5dXBvY214Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc0NjkwOTMsImV4cCI6MjA1MzA0NTA5M30.KL63hZAj8ju8rXAGao7efm3PphmBN-9u2Vrv86UU8GU",
+        "--dart-define=WEBKEY=694389369984-st59324ofhfd35v2j7hm68a3igr4bn6u.apps.googleusercontent.com"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "label": "flutter: flutter build apk",
+      "detail": ""
+    },
+    {
+      "type": "flutter",
+      "command": "flutter",
+      "args": [
+        "build",
+        "appbundle",
+        "--dart-define=URL=https://inxpyrnvledmkyupocmx.supabase.co",
+        "--dart-define=ANON=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlueHB5cm52bGVkbWt5dXBvY214Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc0NjkwOTMsImV4cCI6MjA1MzA0NTA5M30.KL63hZAj8ju8rXAGao7efm3PphmBN-9u2Vrv86UU8GU",
+        "--dart-define=WEBKEY=694389369984-st59324ofhfd35v2j7hm68a3igr4bn6u.apps.googleusercontent.com"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "label": "flutter: flutter build appbundle",
+      "detail": ""
+    }
+  ]
+}

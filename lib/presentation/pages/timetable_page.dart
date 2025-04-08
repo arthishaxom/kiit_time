@@ -8,7 +8,7 @@ import 'package:kiittime/presentation/bloc/auth/auth_state.dart';
 import 'package:kiittime/presentation/bloc/timetable/timetable_cubit.dart';
 import 'package:kiittime/presentation/pages/home_page.dart';
 import 'package:kiittime/presentation/widgets/tt_builder.dart';
-// import 'package:kiittime/repo/noti_repo.dart';
+import 'package:kiittime/repo/noti_repo.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +26,7 @@ class _TimetablePageState extends State<TimetablePage> {
   List<String> tabs = Constants().daysIndex.keys.toList();
   int day = Constants().getDayIndex();
   final remindTimes = {
+    0: "Off",
     10: 10,
     15: 15,
     20: 20,
@@ -40,11 +41,27 @@ class _TimetablePageState extends State<TimetablePage> {
     setState(() {
       selectedReminderTime = minutes;
     });
+
+    // If user selects "Off" (0 minutes), cancel all notifications
+    if (minutes == 0) {
+      final notiService = NotiService();
+      await notiService.cancelAllNoti();
+    } else {
+      // Otherwise schedule notifications with the new time
+      if (context.mounted) {
+        context.read<TimetableCubit>().scheduleClasses();
+      }
+    }
   }
 
   void reset() async {
     final ttBox = Hive.box('timetable');
     await ttBox.clear();
+
+    // Cancel all scheduled notifications
+    final notiService = NotiService();
+    await notiService.cancelAllNoti();
+
     if (context.mounted) {
       context.read<AuthCubit>().signOut();
       Navigator.pushAndRemoveUntil(
@@ -117,16 +134,13 @@ class _TimetablePageState extends State<TimetablePage> {
               ),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TabBarView(
-              children: [
-                for (var day in tabs)
-                  TTBuilder(
-                    day: day.toUpperCase(),
-                  ),
-              ],
-            ),
+          body: TabBarView(
+            children: [
+              for (var day in tabs)
+                TTBuilder(
+                  day: day.toUpperCase(),
+                ),
+            ],
           ),
         ),
       ),
@@ -204,16 +218,19 @@ class _TimetablePageState extends State<TimetablePage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 16),
                         placeholder: const Text('Time To Remind Before Class'),
+                        // In the ShadSelect widget's optionsBuilder:
                         optionsBuilder: (p0, index) {
-                          final list = [10, 15, 20, 25, 30];
+                          final list = [0, 10, 15, 20, 25, 30];
                           if (index >= list.length) return null;
                           return ShadOption(
                             value: list[index],
-                            child: Text(list[index].toString()),
+                            child: Text(list[index] == 0
+                                ? "Off"
+                                : list[index].toString()),
                           );
                         },
                         selectedOptionBuilder: (context, value) =>
-                            Text(value.toString()),
+                            Text(value == 0 ? "Off" : value.toString()),
                         onChanged: (value) async {
                           saveReminderTime(value ?? 15);
                           ShadToaster.of(context).show(
@@ -230,11 +247,12 @@ class _TimetablePageState extends State<TimetablePage> {
                                   ),
                                 ],
                               ),
-                              description: Text(
-                                  "We will remind you $value minutes before class."),
+                              description: Text(value == 0
+                                  ? "Notifications turned off"
+                                  : "We will remind you $value minutes before class."),
                             ),
                           );
-                          context.read<TimetableCubit>().scheduleClasses();
+                          // Removed the scheduleClasses call here since it's now in saveReminderTime
                         },
                       );
                     }),
@@ -283,7 +301,7 @@ class _TimetablePageState extends State<TimetablePage> {
                         GestureDetector(
                           onTap: () async {
                             final Uri url = Uri.parse(
-                                'mailto:ashishpothal@gmail.com?subject=Query%20Regarding%20KIIT%20Time');
+                                'mailto:pothal.builds@gmail.com?subject=Query%20Regarding%20KIIT%20Time');
                             if (!await launchUrl(url)) {
                               throw Exception('Could not launch $url');
                             }
